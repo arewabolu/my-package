@@ -8,43 +8,46 @@ import (
 	"strconv"
 )
 
-/*var (
-	capital    float64
-	length     int
-	percentage float64
-)
+const rebase int = 3 // rebase every 8 hours i.e 3rebases per day
 
-func compoundCalc1(capital float64, percentage float64) {
-	length = 1
-	baseVal := 1 + (percentage / 100)
-	fmt.Println(baseVal)
-	factor := math.Pow(baseVal, float64(length))
-	DayOne := capital * (factor - 1)
-	fmt.Println(DayOne)
+type initVal struct {
+	Principal float64 //principal
+	Time      int     //duration in days
+	Interest  float64 //percentage of interest
 }
-*/
+
+func (values *initVal) compoundCalc() float64 {
+
+	k := float64(rebase) * float64(values.Time)
+	//
+	baseVal := 1 + (values.Interest / 100)
+	//totalValue := math.Pow(compVal, k)
+	return values.Principal * math.Pow(baseVal, k)
+}
+
 func main() {
-	//fmt.Scanln(&capital)
-	//fmt.Scanln(&percentage)
-	//compoundCalc1(float64(capital), float64(percentage))
-	capital := os.Args[1]
-	length := os.Args[2]
-	percentage := os.Args[3]
-	cap, err := strconv.ParseFloat(capital, 64)
+	P := os.Args[1]
+
+	P2, err := strconv.ParseFloat(P, 64)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	duration, err := strconv.ParseFloat(length, 64)
+
+	T := os.Args[2]
+
+	T2, err := strconv.ParseFloat(T, 64)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	interest, err := strconv.ParseFloat(percentage, 64)
+
+	n := os.Args[3]
+	n2, err := strconv.ParseFloat(n, 64)
 	if err != nil {
 		log.Fatalln(err)
 	}
-	baseVal := 1.0 + (interest / 100)
-	fact := math.Pow(baseVal, float64(duration))
-	DayOne := (cap * fact) - 1
-	fmt.Print("The compound interest for the duration is:", DayOne)
+
+	compVal := initVal{P2, int(T2), n2}
+
+	fmt.Sprintf("The compound value is:%.2f", compVal.compoundCalc())
 
 }
